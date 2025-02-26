@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct GreencyApp: App {
+struct RecyclingscanApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -11,9 +11,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		9F8B41572D6DFAE4009F4392 /* Greency */ = {
+		9F8B41572D6DFAE4009F4392 /* Recyclingscan */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Greency;
+			path = Recyclingscan;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +32,7 @@
 		9F8B414C2D6DFAE4009F4392 = {
 			isa = PBXGroup;
 			children = (
-				9F8B41572D6DFAE4009F4392 /* Greency */,
+				9F8B41572D6DFAE4009F4392 /* Recyclingscan */,
 				9F8B41562D6DFAE4009F4392 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +61,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				9F8B41572D6DFAE4009F4392 /* Greency */,
+				9F8B41572D6DFAE4009F4392 /* Recyclingscan */,
 			);
 			name = Greency;
 			packageProductDependencies = (
