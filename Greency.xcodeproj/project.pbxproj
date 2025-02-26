@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		9F8B41552D6DFAE4009F4392 /* Recyclingscan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recyclingscan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F8B41552D6DFAE4009F4392 /* Greency.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Greency.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		9F8B41572D6DFAE4009F4392 /* Recyclingscan */ = {
+		9F8B41572D6DFAE4009F4392 /* Greency */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Recyclingscan;
+			path = Greency;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +32,7 @@
 		9F8B414C2D6DFAE4009F4392 = {
 			isa = PBXGroup;
 			children = (
-				9F8B41572D6DFAE4009F4392 /* Recyclingscan */,
+				9F8B41572D6DFAE4009F4392 /* Greency */,
 				9F8B41562D6DFAE4009F4392 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,7 +40,7 @@
 		9F8B41562D6DFAE4009F4392 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9F8B41552D6DFAE4009F4392 /* Recyclingscan.app */,
+				9F8B41552D6DFAE4009F4392 /* Greency.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9F8B41542D6DFAE4009F4392 /* Recyclingscan */ = {
+		9F8B41542D6DFAE4009F4392 /* Greency */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9F8B41632D6DFAE6009F4392 /* Build configuration list for PBXNativeTarget "Recyclingscan" */;
+			buildConfigurationList = 9F8B41632D6DFAE6009F4392 /* Build configuration list for PBXNativeTarget "Greency" */;
 			buildPhases = (
 				9F8B41512D6DFAE4009F4392 /* Sources */,
 				9F8B41522D6DFAE4009F4392 /* Frameworks */,
@@ -61,13 +61,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				9F8B41572D6DFAE4009F4392 /* Recyclingscan */,
+				9F8B41572D6DFAE4009F4392 /* Greency */,
 			);
-			name = Recyclingscan;
+			name = Greency;
 			packageProductDependencies = (
 			);
 			productName = Recyclingscan;
-			productReference = 9F8B41552D6DFAE4009F4392 /* Recyclingscan.app */;
+			productReference = 9F8B41552D6DFAE4009F4392 /* Greency.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9F8B41502D6DFAE4009F4392 /* Build configuration list for PBXProject "Recyclingscan" */;
+			buildConfigurationList = 9F8B41502D6DFAE4009F4392 /* Build configuration list for PBXProject "Greency" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9F8B41542D6DFAE4009F4392 /* Recyclingscan */,
+				9F8B41542D6DFAE4009F4392 /* Greency */,
 			);
 		};
 /* End PBXProject section */
@@ -305,7 +305,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9F8B41502D6DFAE4009F4392 /* Build configuration list for PBXProject "Recyclingscan" */ = {
+		9F8B41502D6DFAE4009F4392 /* Build configuration list for PBXProject "Greency" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9F8B41612D6DFAE6009F4392 /* Debug */,
@@ -314,7 +314,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9F8B41632D6DFAE6009F4392 /* Build configuration list for PBXNativeTarget "Recyclingscan" */ = {
+		9F8B41632D6DFAE6009F4392 /* Build configuration list for PBXNativeTarget "Greency" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9F8B41642D6DFAE6009F4392 /* Debug */,
