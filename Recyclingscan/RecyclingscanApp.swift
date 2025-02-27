@@ -5,13 +5,13 @@
 //  Created by Rand abdullatif on 26/08/1446 AH.
 //
 
-import SwiftUI
+// import SwiftUI
 
-@main
-struct RecyclingscanApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
-}
+// @main
+// struct RecyclingscanApp: App {
+ //  var body: some Scene {
+  //      WindowGroup {
+   //         ContentView()
+   //     }
+   // }
+// }
