@@ -15,3 +15,18 @@
    //     }
    // }
 // }
+import SwiftUI
+import Firebase
+
+@main
+struct GreencyApp: App {  // Make sure your app struct is correct
+    init() {
+        FirebaseApp.configure()
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            SignUpView()  // Ensure this is your initial view
+        }
+    }
+}
