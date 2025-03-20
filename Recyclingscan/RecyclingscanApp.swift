@@ -30,3 +30,12 @@ struct GreencyApp: App {  // Make sure your app struct is correct
         }
     }
 }
+
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            SplashScreenView()
+        }
+    }
+}
+ 
