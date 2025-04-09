@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>RecycleClassifierApp</string>
+
+    <!-- وصف استخدام الكاميرا -->
+    <key>NSCameraUsageDescription</key>
+    <string>نحتاج الوصول للكاميرا لتصوير المواد وإعادة التدوير</string>
+
+    <!-- وصف استخدام الموقع -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>نحتاج موقعك لعرض أقرب نقطة إعادة تدوير</string>
+
+    <!-- السماح بالتحقق من وجود تطبيق Google Maps -->
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>comgooglemaps</string>
+    </array>
+</dict>
+</plist>

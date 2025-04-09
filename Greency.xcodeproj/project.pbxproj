@@ -6,13 +6,30 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B164F2C32DA709000030AC3B /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = B164F2C22DA709000030AC3B /* GoogleMaps */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		9F9B30A42DA6A63A00F660BA /* Greency.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Greency.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B164F2C72DA728D50030AC3B /* Exceptions for "Greency" folder in "Greency" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9F9B30A32DA6A63A00F660BA /* Greency */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9F9B30A62DA6A63A00F660BA /* Greency */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B164F2C72DA728D50030AC3B /* Exceptions for "Greency" folder in "Greency" target */,
+			);
 			path = Greency;
 			sourceTree = "<group>";
 		};
@@ -23,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B164F2C32DA709000030AC3B /* GoogleMaps in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +83,7 @@
 			);
 			name = Greency;
 			packageProductDependencies = (
+				B164F2C22DA709000030AC3B /* GoogleMaps */,
 			);
 			productName = Greency;
 			productReference = 9F9B30A42DA6A63A00F660BA /* Greency.app */;
@@ -94,6 +113,9 @@
 			);
 			mainGroup = 9F9B309B2DA6A63A00F660BA;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B164F2C12DA709000030AC3B /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9F9B30A52DA6A63A00F660BA /* Products */;
 			projectDirPath = "";
@@ -256,6 +278,7 @@
 				DEVELOPMENT_TEAM = 46X9BPX67K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Greency/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -285,6 +308,7 @@
 				DEVELOPMENT_TEAM = 46X9BPX67K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Greency/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -326,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B164F2C12DA709000030AC3B /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B164F2C22DA709000030AC3B /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B164F2C12DA709000030AC3B /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9F9B309C2DA6A63A00F660BA /* Project object */;
 }
