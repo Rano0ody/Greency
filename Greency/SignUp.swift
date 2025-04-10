@@ -9,7 +9,7 @@ struct SignUpView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage: String?
-    @State private var navigateToLogin = false
+    @State private var navigateToHome = false
     
     var body: some View {
         NavigationStack {
@@ -54,7 +54,7 @@ struct SignUpView: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    NavigationLink(destination: LogInView(), isActive: $navigateToLogin) {
+                    NavigationLink(destination: LogInView()) {
                         Text("Log In")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -63,6 +63,11 @@ struct SignUpView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, 120)
+
+                // Hidden NavigationLink to HomePageView
+                NavigationLink(destination: HomePageView(), isActive: $navigateToHome) {
+                    EmptyView()
+                }
             }
             .onTapGesture {
                 hideKeyboard()
@@ -71,13 +76,11 @@ struct SignUpView: View {
     }
     
     func signUp() {
-        // Simple validation
         guard !firstName.isEmpty, !lastName.isEmpty, !email.isEmpty, !password.isEmpty else {
             errorMessage = "All fields are required."
             return
         }
         
-        // Check for duplicate email
         let descriptor = FetchDescriptor<UserData>(predicate: #Predicate { $0.email == email })
         Task {
             if let existingUser = try? await context.fetch(descriptor).first, existingUser != nil {
@@ -85,11 +88,13 @@ struct SignUpView: View {
             } else {
                 let newUser = UserData(firstName: firstName, lastName: lastName, email: email, password: password)
                 context.insert(newUser)
-                navigateToLogin = true
+                navigateToHome = true
             }
         }
     }
 }
+
+
 #Preview {
     SignUpView()
 }
