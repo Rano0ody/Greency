@@ -1,14 +1,5 @@
-//
-//  LogIn.swift
-//  Greency
-//
-//  Created by Rand abdullatif on 03/09/1446 AH.
-//
-
-
 import SwiftUI
 import _SwiftData_SwiftUI
-
 
 struct LogInView: View {
     @Environment(\.modelContext) private var context
@@ -17,7 +8,7 @@ struct LogInView: View {
     @State private var password = ""
     @State private var errorMessage: String?
     @State private var navigateToHome = false
-    
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 15) {
@@ -30,13 +21,9 @@ struct LogInView: View {
                     .font(.custom("SF Pro Display", size: 25).weight(.regular))
                     .frame(maxWidth: .infinity, alignment: .center)
                 
-                // Email
                 InputField(label: "Email", text: $email, placeholder: "Enter your email", isEmail: true)
-                
-                // Password
                 InputField(label: "Password", text: $password, placeholder: "Enter your password", isSecure: true)
                 
-                // Show error message if any
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
                         .foregroundColor(.red)
@@ -44,7 +31,6 @@ struct LogInView: View {
                         .padding(.horizontal, 24)
                 }
                 
-                // Log In Button
                 Button(action: logIn) {
                     Text("Log In")
                         .frame(maxWidth: .infinity)
@@ -57,9 +43,14 @@ struct LogInView: View {
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
                 
+                // Navigate to HomePage
+                NavigationLink(destination: HomePageView(), isActive: $navigateToHome) {
+                    EmptyView()
+                }
+                .hidden()
+                
                 Spacer()
                 
-                // Sign Up Section
                 HStack {
                     Text("Don't have an account?")
                         .font(.caption)
@@ -81,7 +72,7 @@ struct LogInView: View {
         }
     }
     
-    @Query private var users: [UserData] // Will auto-query all users
+    @Query private var users: [UserData]
     
     func logIn() {
         guard !email.isEmpty, !password.isEmpty else {
@@ -111,6 +102,3 @@ struct LogInView: View {
 #Preview {
     LogInView()
 }
-
-
-

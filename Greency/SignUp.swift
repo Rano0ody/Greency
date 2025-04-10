@@ -54,7 +54,7 @@ struct SignUpView: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    NavigationLink(destination: LogInView(), isActive: $navigateToLogin) {
+                    NavigationLink(destination: HomePageView(), isActive: $navigateToLogin) {
                         Text("Log In")
                             .font(.caption)
                             .fontWeight(.bold)
