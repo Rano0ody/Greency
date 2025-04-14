@@ -4,10 +4,10 @@
 //
 //  Created by joody on 12/10/1446 AH.
 //
-
 import SwiftUI
 
 struct profileView: View {
+    @Environment(\.dismiss) private var dismiss  // لاستدعاء dismiss للصفحة
     @State private var email: String = "llanmi@mail.com"
     @State private var password: String = "XXXXXXXXXXXXXX"
     @State private var name: String = "Tahani Muhsen"
@@ -26,7 +26,7 @@ struct profileView: View {
                     .foregroundColor(Color(hex: "2FC2D6"))
                     .padding(.bottom, 10)
                 
-                // اسم المستخدم - يظهر كـ Text عند عدم التعديل وعند التعديل يصبح قابل للتعديل
+                // اسم المستخدم – يظهر كنص عند عدم التعديل وعند التعديل يصبح TextField
                 if isEditing {
                     TextField("Username", text: $userName)
                         .font(.custom("SF Pro", size: 22))
@@ -35,82 +35,76 @@ struct profileView: View {
                         .padding()
                         .background(Color(hex: "F2F2F7"))
                         .cornerRadius(10)
-                        .onChange(of: userName) { newValue in
-                            // التأكد من أن النص بالإنجليزي فقط
-                            userName = newValue.filter { $0.isNumber || $0.isLetter }
-                        }
-                        .disableAutocorrection(true) // تعطيل التصحيح التلقائي
-                        .keyboardType(.asciiCapable) // تأكد من أن الكيبورد يتعامل مع النصوص الإنجليزية فقط
+                        .disableAutocorrection(true)
+                        .keyboardType(.asciiCapable)
                 } else {
                     Text(userName)
                         .font(.custom("SF Pro", size: 22))
                         .fontWeight(.bold)
-                        .foregroundColor(isEditing ? .black : Color.gray) // يظهر بالرمادي عندما لا يكون في وضع التعديل
+                        .foregroundColor(.gray)
                 }
                 
-                // حقول الإيميل والباسوورد مع المسافة بينهما
-                VStack(spacing: 25) {  // زيادة المسافة بين الحقول
+                // حقول الإيميل والباسوورد مع مسافة بينهم
+                VStack(spacing: 25) {
                     ProfileField(icon: "envelope.fill", text: $email, isSecure: false, isEditing: isEditing)
                     ProfileField(icon: "lock.fill", text: $password, isSecure: true, isEditing: isEditing)
                 }
                 .padding(.horizontal, 20)
                 
-                // زر تسجيل الخروج مع تكبير الكلمة
+                // زر تسجيل الخروج
                 Button(action: logout) {
                     HStack {
                         Text("Logout")
                             .foregroundColor(Color(hex: "FF4C4C"))
-                            .font(.custom("SF Pro", size: 22)) // تكبير كلمة "Logout"
+                            .font(.custom("SF Pro", size: 22))
                             .fontWeight(.bold)
                         Image(systemName: "arrow.right.square")
                             .foregroundColor(Color(hex: "FF4C4C"))
                     }
                 }
-                .padding(.top, 30)  // زيادة المسافة فوق زر logout
+                .padding(.top, 30)
                 
                 Spacer()
             }
             .navigationBarTitle("Profile Page", displayMode: .inline)
             .toolbar {
+                // زر الـ Back المُعدل: عند الضغط يُغلق الصفحة (يستخدم dismiss)
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {}) {
+                    Button(action: {
+                        dismiss()
+                    }) {
                         Text("Back")
                             .foregroundColor(Color(hex: "007AFF"))
-                            .font(.custom("SF Pro", size: 18)) // استخدم خط SF Pro
+                            .font(.custom("SF Pro", size: 18))
                     }
                 }
+                // زر "Edit" أو "Save"
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         isEditing.toggle()
                         if !isEditing {
-                            // حفظ التغييرات عند الضغط على "Save"
+                            // حفظ التغييرات هنا
                             saveChanges()
                         }
                     }) {
-                        Text(isEditing ? "Save" : "Edit") // تغيير النص بين "Edit" و "Save"
+                        Text(isEditing ? "Save" : "Edit")
                             .foregroundColor(Color(hex: "007AFF"))
-                            .font(.custom("SF Pro", size: 18)) // استخدم خط SF Pro
+                            .font(.custom("SF Pro", size: 18))
                     }
                 }
             }
         }
     }
     
-    // حفظ التغييرات
+    // حفظ التغييرات (يمكنك تعديل منطق الحفظ كما تفضلي)
     func saveChanges() {
-        UserDefaults.standard.set(userName, forKey: "userName")
-        UserDefaults.standard.set(email, forKey: "userEmail")
-        UserDefaults.standard.set(password, forKey: "userPassword")
+        // إضافة كود التحديث وحفظ البيانات هنا
+        print("Saving changes for user: \(userName)")
     }
     
-    // تسجيل الخروج
+    // تسجيل الخروج (يمكنك تعديل منطق تسجيل الخروج لاحقاً)
     func logout() {
-        // حذف بيانات المستخدم من UserDefaults
-        UserDefaults.standard.removeObject(forKey: "userEmail")
-        UserDefaults.standard.removeObject(forKey: "userPassword")
-        UserDefaults.standard.removeObject(forKey: "userName")
-        
-        // إعادة تعيين الحقول إلى قيمها الافتراضية
+        // إعادة تعيين الحقول أو إضافة منطق تسجيل الخروج
         email = "llanmi@mail.com"
         password = "XXXXXXXXXXXXXX"
         userName = "Username"
@@ -132,30 +126,28 @@ struct ProfileField: View {
                 .frame(width: 30, height: 30)
             
             if isSecure {
-                // عرض TextField بدلاً من SecureField إذا كان في وضع التعديل
                 if isEditing {
                     TextField("Password", text: $text)
                         .foregroundColor(.black)
-                        .font(.custom("SF Pro", size: 18)) // استخدم خط SF Pro
+                        .font(.custom("SF Pro", size: 18))
                         .disableAutocorrection(true)
                         .keyboardType(.asciiCapable)
                 } else {
                     SecureField("Password", text: $text)
                         .disabled(true)
                         .foregroundColor(.black)
-                        .font(.custom("SF Pro", size: 18)) // استخدم خط SF Pro
+                        .font(.custom("SF Pro", size: 18))
                 }
             } else {
                 TextField("", text: $text)
                     .disabled(!isEditing)
                     .foregroundColor(.black)
-                    .font(.custom("SF Pro", size: 18)) // استخدم خط SF Pro
+                    .font(.custom("SF Pro", size: 18))
                     .onChange(of: text) { newValue in
-                        // التأكد من أن النص بالإنجليزي فقط
                         text = newValue.filter { $0.isNumber || $0.isLetter || $0 == "@" || $0 == "." }
                     }
-                    .disableAutocorrection(true) // تعطيل التصحيح التلقائي
-                    .keyboardType(.asciiCapable) // تأكد من أن الكيبورد يتعامل مع النصوص الإنجليزية فقط
+                    .disableAutocorrection(true)
+                    .keyboardType(.asciiCapable)
             }
         }
         .padding()
@@ -165,7 +157,6 @@ struct ProfileField: View {
     }
 }
 
-// امتداد لتحويل أكواد الألوان من Hex إلى Color
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -192,9 +183,8 @@ extension Color {
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
+struct profileView_Previews: PreviewProvider {
     static var previews: some View {
         profileView()
     }
 }
-
