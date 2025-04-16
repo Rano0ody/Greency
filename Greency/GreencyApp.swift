@@ -18,5 +18,6 @@ struct GreencyApp: App {
         WindowGroup {
             SplashScreenView()
         }
+        .modelContainer(for: UserData.self)
     }
 }
