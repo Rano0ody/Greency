@@ -17,7 +17,7 @@ struct HomePageView: View {
     var currentUser: UserData? {
         users.first { $0.email == loggedInEmail }
     }
-
+    @State private var selectedTab: String? = nil
     var body: some View {
         let userName = currentUser?.firstName ?? "Guest"
         let lastName = currentUser?.lastName ?? "" // Add last name
@@ -40,7 +40,15 @@ struct HomePageView: View {
                 }
                 .padding()
             }
-            CustomTabBar()
+            CustomTabBar(selectedTab: $selectedTab)
+            NavigationLink(destination: ContentView(), tag: "Camera", selection: $selectedTab) {
+                EmptyView()
+            }
+
+            NavigationLink(destination: LocationTabView(), tag: "Map", selection: $selectedTab) {
+                EmptyView()
+            }
+
         }
         .background(Color(.systemGray6))
         .edgesIgnoringSafeArea(.bottom)
@@ -101,7 +109,7 @@ struct CategoryCard: View {
 }
 
 struct CustomTabBar: View {
-    @State private var selectedTab: String = "Home"
+    @Binding var selectedTab: String?
     
     var body: some View {
         HStack {
