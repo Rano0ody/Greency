@@ -5,11 +5,6 @@
 //  Created by Maha Salem Alghmadi on 12/10/1446 AH.
 //
 //
-//  PlasticPageView.swift
-//  Greency
-//
-//  Created by Maha Salem Alghmadi on 12/10/1446 AH.
-//
 
 import SwiftUI
 
