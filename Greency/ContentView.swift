@@ -16,7 +16,9 @@ struct ContentView: View {
     @State private var capturedImage: UIImage?
     @State private var materialLabel: String = ""
     @State private var showPopup: Bool = false
-
+    @State private var selectedTab: String? = "Camera"
+    @State private var navigateToProfile = false
+    
     var body: some View {
         ZStack {
             CameraView { image in
@@ -46,8 +48,18 @@ struct ContentView: View {
                     Spacer()
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 40)
+               .padding(.bottom, 150)
+
             }
+
+               VStack {
+                   Spacer()
+                   CustomTabBar(selectedTab: $selectedTab)
+                       .padding(.bottom, 0)
+                       .background(Color.white)
+                       .edgesIgnoringSafeArea(.bottom)
+
+               }
 
             if showPopup {
                 CustomResultView(label: materialLabel) {
@@ -56,7 +68,17 @@ struct ContentView: View {
                 }
                 .zIndex(1)
             }
+            NavigationLink(destination: ContentView(), tag: "Camera", selection: $selectedTab) {
+                            EmptyView()
+                        }
+                        NavigationLink(destination: LocationTabView(), tag: "Map", selection: $selectedTab) {
+                            EmptyView()
+                        }
+            NavigationLink(destination: HomePageView(), tag: "Home", selection: $selectedTab) {
+                            EmptyView()
+            }
         }
+        .navigationBarBackButtonHidden(true)
     }
 
     func classifyImage(_ image: UIImage) {
@@ -211,3 +233,4 @@ struct CustomResultView: View {
         label.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "unknown"
     }
 }
+

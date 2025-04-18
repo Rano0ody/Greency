@@ -3,14 +3,15 @@ import SwiftData
 
 struct SignUpView: View {
     @Environment(\.modelContext) private var context
+    @AppStorage("loggedInEmail") var loggedInEmail: String = ""
     
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage: String?
-    @State private var navigateToLogin = false
-    
+    @State private var navigateToHome = false
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 15) {
@@ -41,11 +42,17 @@ struct SignUpView: View {
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
-                        .background(Color.green)
+                        .background(isFormValid ? Color.green : Color.gray)
                         .cornerRadius(10)
                 }
+                .disabled(!isFormValid)
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
+                
+                NavigationLink(destination: HomePageView(), isActive: $navigateToHome) {
+                    EmptyView()
+                }
+                .hidden()
                 
                 Spacer()
                 
@@ -54,7 +61,7 @@ struct SignUpView: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    NavigationLink(destination: LogInView(), isActive: $navigateToLogin) {
+                    NavigationLink(destination: LogInView()) {
                         Text("Log In")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -67,29 +74,57 @@ struct SignUpView: View {
             .onTapGesture {
                 hideKeyboard()
             }
+            .navigationBarBackButtonHidden(true) // ← Hide back button here
         }
     }
-    
+
+    var isFormValid: Bool {
+        !firstName.isEmpty &&
+        !lastName.isEmpty &&
+        isValidEmail(email) &&
+        password.count >= 6
+    }
+
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        return NSPredicate(format: "SELF MATCHES %@", emailRegEx).evaluate(with: email)
+    }
+
     func signUp() {
-        // Simple validation
-        guard !firstName.isEmpty, !lastName.isEmpty, !email.isEmpty, !password.isEmpty else {
-            errorMessage = "All fields are required."
+        guard isFormValid else {
+            errorMessage = "Please fill all fields correctly."
             return
         }
-        
-        // Check for duplicate email
+
         let descriptor = FetchDescriptor<UserData>(predicate: #Predicate { $0.email == email })
+
         Task {
-            if let existingUser = try? await context.fetch(descriptor).first, existingUser != nil {
-                errorMessage = "An account with this email already exists."
-            } else {
+            do {
+                let results = try await context.fetch(descriptor)
+                if !results.isEmpty {
+                    errorMessage = "An account with this email already exists."
+                    return
+                }
+                
                 let newUser = UserData(firstName: firstName, lastName: lastName, email: email, password: password)
                 context.insert(newUser)
-                navigateToLogin = true
+                try context.save()
+                
+                DispatchQueue.main.async {
+                    loggedInEmail = email
+                    navigateToHome = true
+                }
+            } catch {
+                errorMessage = "Something went wrong. Please try again."
             }
         }
     }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
+
 #Preview {
     SignUpView()
 }

@@ -10,7 +10,8 @@ import CoreLocation
 
 struct LocationTabView: View {
     @StateObject private var locationManager = LocationManager()
-
+    @State private var selectedTab: String? = "Map" 
+    
     let binLocations: [PlaceMarker] = [
         PlaceMarker(coordinate: CLLocationCoordinate2D(latitude: 24.6514038, longitude: 46.8243712)),
         PlaceMarker(coordinate: CLLocationCoordinate2D(latitude: 24.6519085, longitude: 46.840193)),
@@ -37,16 +38,32 @@ struct LocationTabView: View {
         PlaceMarker(coordinate: CLLocationCoordinate2D(latitude: 24.9576944, longitude: 46.7063276)) ,
         PlaceMarker(coordinate: CLLocationCoordinate2D(latitude: 24.9576944, longitude: 46.7063276)) ,
         PlaceMarker(coordinate: CLLocationCoordinate2D(latitude: 24.5866111, longitude: 46.7626331)) ,
-             ]
-
-    var body: some View {
-        GoogleMapView(
-            markers: binLocations,
-            userLocation: locationManager.location
-        )
-        .edgesIgnoringSafeArea(.all)
+    ]
+    
+    var body: some View {        
+        ZStack {
+            GoogleMapView(
+                markers: binLocations,
+                userLocation: locationManager.location
+            )
+            .ignoresSafeArea()
+            
+            VStack {
+                Spacer()
+                CustomTabBar(selectedTab: $selectedTab)
+                    .background(Color.white.ignoresSafeArea(edges: .bottom))
+                    .shadow(color: .black.opacity(0.1), radius: 6, x: 0, y: -2)
+            }
+            
+            // روابط التنقل بين التابات
+            NavigationLink(destination: HomePageView(), tag: "Home", selection: $selectedTab) {
+                EmptyView()
+            }
+            NavigationLink(destination: ContentView(), tag: "Camera", selection: $selectedTab) {
+                EmptyView()
+            }
+        }
+        .navigationBarBackButtonHidden(true)
     }
+    
 }
-
-
-
