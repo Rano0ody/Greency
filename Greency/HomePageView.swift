@@ -1,4 +1,3 @@
-//
 //  HomePageView.swift
 //  Greency
 //
@@ -6,23 +5,28 @@
 //
 //
 
-
-
-
 import SwiftUI
 import SwiftData
 
 struct HomePageView: View {
-    @Query private var users:[UserData]
-    @State private var selectedTab: String = "Home"  // إضافة متغير selectedTab هنا
+    @AppStorage("loggedInEmail") var loggedInEmail: String = ""
+    @Query private var users: [UserData]
     
+    var currentUser: UserData? {
+        users.first { $0.email == loggedInEmail }
+    }
+    @State private var selectedTab: String? = "Home"
+    @State private var navigateToProfile = false
+
     var body: some View {
-        let userName = users.first?.firstName ?? "Guest"
+        let userName = currentUser?.firstName ?? "Guest"
+        let lastName = currentUser?.lastName ?? "" // Add last name
+        
         VStack(spacing: 0) {
-            header(userName: userName)
-            
+            header(userName: userName, lastName: lastName) // Pass both first and last name
             ScrollView {
                 VStack(spacing: 20) {
+                    
                     NavigationLink(destination: GlassPageView()) {
                         CategoryCard(title: "Glass", imageName: "glass")
                     }
@@ -30,21 +34,34 @@ struct HomePageView: View {
                     NavigationLink(destination: PlasticPageView()) {
                         CategoryCard(title: "Plastic", imageName: "plastic")
                     }
-
                     NavigationLink(destination: PaperPageView()) {
                         CategoryCard(title: "Paper", imageName: "paper")
                     }
                 }
                 .padding()
             }
-            
-            CustomTabBar(selectedTab: $selectedTab)  // تمرير الـ selectedTab كـ Binding
+            CustomTabBar(selectedTab: $selectedTab)
+            NavigationLink(destination: HomePageView(), tag: "Home", selection: $selectedTab) {
+                EmptyView()
+            }
+            NavigationLink(destination: ContentView(), tag: "Camera", selection: $selectedTab) {
+                EmptyView()
+            }
+
+            NavigationLink(destination: LocationTabView(), tag: "Map", selection: $selectedTab) {
+                EmptyView()
+            }
+            NavigationLink(destination: profileView(), isActive: $navigateToProfile) {
+                EmptyView()
+            }
+
         }
         .background(Color(.systemGray6))
         .edgesIgnoringSafeArea(.bottom)
+        .navigationBarBackButtonHidden(true)
     }
     
-    private func header(userName: String) -> some View {
+    private func header(userName: String, lastName: String) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Welcome")
@@ -53,7 +70,7 @@ struct HomePageView: View {
                 
                 HStack {
                     Text("Good Evening")
-                    Text(userName)
+                    Text("\(userName) \(lastName)") // Display both first and last name
                         .foregroundColor(Color("MainPurple"))
                 }
                 .font(.title3)
@@ -61,15 +78,16 @@ struct HomePageView: View {
             
             Spacer()
             
-            // تم إزالة زر العودة هنا
-            NavigationLink(destination: profileView().navigationBarBackButtonHidden(true)) { // إزالة زر العودة هنا
-                Image("profileImage") // <-- استخدمي اسم الصورة بالضبط
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 60, height: 60)
-                    .clipShape(Circle())
-                    .shadow(radius: 4)
-            }
+            Image("profileImage")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 70, height: 70)
+                .clipShape(Circle())
+                .onTapGesture {
+                    navigateToProfile = true
+                }
+
+                
         }
         .padding()
         .background(Color.white)
@@ -89,7 +107,7 @@ struct CategoryCard: View {
                 .clipped()
                 .cornerRadius(12)
                 .shadow(radius: 5)
-            
+
             Text(title)
                 .font(.title)
                 .bold()
@@ -100,7 +118,7 @@ struct CategoryCard: View {
 }
 
 struct CustomTabBar: View {
-    @Binding var selectedTab: String  // استقبال الـ Binding هنا
+    @Binding var selectedTab: String?
     
     var body: some View {
         HStack {
@@ -139,7 +157,5 @@ struct CustomTabBar: View {
 }
 
 #Preview {
-    NavigationStack {
-        HomePageView()
-    }
+    HomePageView()
 }

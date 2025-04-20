@@ -18,29 +18,17 @@
 		B164F2C72DA728D50030AC3B /* Exceptions for "Greency" folder in "Greency" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				.swift,
 				Info.plist,
 			);
 			target = 9F9B30A32DA6A63A00F660BA /* Greency */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		B444A1462DABCD3E00400925 /* Exceptions for "Greency" folder in "Compile Sources" phase from "Greency" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 9F9B30A02DA6A63A00F660BA /* Sources */;
-			membershipExceptions = (
-				.swift,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9F9B30A62DA6A63A00F660BA /* Greency */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				B164F2C72DA728D50030AC3B /* Exceptions for "Greency" folder in "Greency" target */,
-				B444A1462DABCD3E00400925 /* Exceptions for "Greency" folder in "Compile Sources" phase from "Greency" target */,
 			);
 			path = Greency;
 			sourceTree = "<group>";

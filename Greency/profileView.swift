@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct profileView: View {
     @Environment(\.dismiss) private var dismiss
@@ -17,17 +18,63 @@ struct profileView: View {
     @State private var name: String = ""
     @State private var userName: String = "Username"
     @State private var isEditing: Bool = false
+    
+    @State private var selectedItem: PhotosPickerItem?
+    @State private var profileImage: UIImage?
+    @State private var navigateToLogin: Bool = false
+    @State private var navigateToHome: Bool = false
+
 
     var body: some View {
-        NavigationView {
+       NavigationView {
             VStack(spacing: 20) {
                 Spacer()
+                
+                NavigationLink(destination: HomePageView(), isActive: $navigateToHome) {
+                    EmptyView()
+                }
 
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(Color(hex: "2FC2D6"))
-                    .padding(.bottom, 10)
+                if isEditing {
+                    PhotosPicker(selection: $selectedItem, matching: .images) {
+                        if let profileImage {
+                            Image(uiImage: profileImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 100 , height: 100)
+                                .clipShape(Circle())
+                        } else {
+                            Image("profileImage")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 100 , height: 100)
+                                .clipShape(Circle())
+                        }
+                    }
+                    .onChange(of: selectedItem) { newItem in
+                        Task {
+                            if let data = try? await newItem?.loadTransferable(type: Data.self),
+                               let uiImage = UIImage(data: data) {
+                                profileImage = uiImage
+                            }
+                        }
+                    }
+                } else {
+                    if let profileImage {
+                        Image(uiImage: profileImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 100 , height: 100)
+                            .clipShape(Circle())
+                    } else {
+                        Image("profileImage")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 100 , height: 100)
+                            .clipShape(Circle())
+                    }
+                }
+              
+
 
                 if isEditing {
                     TextField("Username", text: $userName)
@@ -35,22 +82,28 @@ struct profileView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.black)
                         .padding()
-                        .background(Color(hex: "F2F2F7"))
                         .cornerRadius(10)
                         .disableAutocorrection(true)
                         .keyboardType(.asciiCapable)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 50)
                 } else {
                     Text(userName)
                         .font(.custom("SF Pro", size: 22))
                         .fontWeight(.bold)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black)
+                        .padding(.bottom, 50)
                 }
 
+                
                 VStack(spacing: 25) {
-                    ProfileField(icon: "envelope.fill", text: $email, isSecure: false, isEditing: isEditing)
-                    ProfileField(icon: "lock.fill", text: $password, isSecure: true, isEditing: isEditing)
+                    ProfileField(icon: "envelope", text: $email, isSecure: false, isEditing: isEditing)
+                    ProfileField(icon: "lock", text: $password, isSecure: true, isEditing: isEditing)
                 }
                 .padding(.horizontal, 20)
+                NavigationLink(destination: SignUpView(), isActive: $navigateToLogin) {
+                    EmptyView()
+                }
 
                 Button(action: logout) {
                     HStack {
@@ -70,13 +123,14 @@ struct profileView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        dismiss()
+                        navigateToHome = true
                     }) {
                         Text("Back")
                             .foregroundColor(Color(hex: "007AFF"))
                             .font(.custom("SF Pro", size: 18))
                     }
                 }
+
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -91,6 +145,7 @@ struct profileView: View {
                     }
                 }
             }
+            .navigationBarBackButtonHidden(true)
             .onAppear {
                 loadUserData()
             }
@@ -138,7 +193,9 @@ struct profileView: View {
         password = ""
         userName = "Username"
         isEditing = false
+        navigateToLogin = true
     }
+
 }
 
 // الحقول
@@ -151,6 +208,7 @@ struct ProfileField: View {
     var body: some View {
         HStack {
             Image(systemName: icon)
+                .font(.system(size: 25))
                 .foregroundColor(Color(hex: "70CB00"))
                 .frame(width: 30, height: 30)
 

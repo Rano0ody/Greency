@@ -23,6 +23,7 @@ struct SignUpView: View {
                 Text("Good Evening")
                     .font(.custom("SF Pro Display", size: 25).weight(.regular))
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.bottom, 30)
                 
                 InputField(label: "First Name", text: $firstName, placeholder: "Enter your first name")
                 InputField(label: "Last Name", text: $lastName, placeholder: "Enter your last name")
@@ -53,9 +54,7 @@ struct SignUpView: View {
                     EmptyView()
                 }
                 .hidden()
-                
-                Spacer()
-                
+                                
                 HStack {
                     Text("Already have an account?")
                         .font(.caption)

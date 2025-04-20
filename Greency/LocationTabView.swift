@@ -10,8 +10,8 @@ import CoreLocation
 
 struct LocationTabView: View {
     @StateObject private var locationManager = LocationManager()
-    @State private var selectedTab: String? = "Map" 
-    
+    @State private var selectedTab: String? = "Map"
+
     let binLocations: [PlaceMarker] = [
         PlaceMarker(coordinate: CLLocationCoordinate2D(latitude: 24.6514038, longitude: 46.8243712)),
         PlaceMarker(coordinate: CLLocationCoordinate2D(latitude: 24.6519085, longitude: 46.840193)),
@@ -49,21 +49,22 @@ struct LocationTabView: View {
             .ignoresSafeArea()
             
             VStack {
-                Spacer()
-               
-                    .background(Color.white.ignoresSafeArea(edges: .bottom))
-                    .shadow(color: .black.opacity(0.1), radius: 6, x: 0, y: -2)
+                            Spacer()
+                            CustomTabBar(selectedTab: $selectedTab)
+                        }
+                        .edgesIgnoringSafeArea(.bottom)
+
+                        // روابط التنقل بين التابات
+                        NavigationLink(destination: HomePageView(), tag: "Home", selection: $selectedTab) {
+                            EmptyView()
+                        }
+                        NavigationLink(destination: ContentView(), tag: "Camera", selection: $selectedTab) {
+                            EmptyView()
+                        }
+                        NavigationLink(destination: LocationTabView(), tag: "Map", selection: $selectedTab) {
+                            EmptyView()
+                        }
+                    }
+                    .navigationBarBackButtonHidden(true)
+                }
             }
-            
-            // روابط التنقل بين التابات
-            NavigationLink(destination: HomePageView(), tag: "Home", selection: $selectedTab) {
-                EmptyView()
-            }
-            NavigationLink(destination: ContentView(), tag: "Camera", selection: $selectedTab) {
-                EmptyView()
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-    }
-    
-}

@@ -28,6 +28,7 @@ struct GoogleMapView: UIViewRepresentable {
         mapView.delegate = context.coordinator
         mapView.isMyLocationEnabled = true
         mapView.settings.myLocationButton = true
+        mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
 
         for markerInfo in markers {
             let marker = GMSMarker(position: markerInfo.coordinate)

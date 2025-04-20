@@ -16,11 +16,12 @@ struct LogInView: View {
                 Text("Welcome")
                     .font(.system(size: 50, weight: .bold))
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 50)
 
                 Text("Good Evening")
                     .font(.custom("SF Pro Display", size: 25).weight(.regular))
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.bottom, 80)
+                
 
                 InputField(label: "Email", text: $email, placeholder: "Enter your email", isEmail: true)
                 InputField(label: "Password", text: $password, placeholder: "Enter your password", isSecure: true)
@@ -49,8 +50,6 @@ struct LogInView: View {
                     EmptyView()
                 }
                 .hidden()
-
-                Spacer()
 
                 HStack {
                     Text("Don't have an account?")
