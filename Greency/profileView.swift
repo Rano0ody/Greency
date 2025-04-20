@@ -4,18 +4,24 @@
 //
 //  Created by joody on 12/10/1446 AH.
 //
+
 import SwiftUI
 import SwiftData
 import PhotosUI
+import UIKit
+
 
 struct profileView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Query private var users: [UserData]
-
+    
+    @AppStorage("loggedInEmail") var loggedInEmail: String = ""
+    @AppStorage("loggedInName") var loggedInName: String = "Username"
+    @AppStorage("profileImageData") var profileImageData: String = ""
+    
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var name: String = ""
     @State private var userName: String = "Username"
     @State private var isEditing: Bool = false
     
@@ -24,15 +30,14 @@ struct profileView: View {
     @State private var navigateToLogin: Bool = false
     @State private var navigateToHome: Bool = false
 
-
     var body: some View {
-       NavigationView {
+        NavigationStack {
             VStack(spacing: 20) {
-                Spacer()
-                
+
                 NavigationLink(destination: HomePageView(), isActive: $navigateToHome) {
                     EmptyView()
                 }
+                .padding(.bottom, 60)
 
                 if isEditing {
                     PhotosPicker(selection: $selectedItem, matching: .images) {
@@ -73,8 +78,6 @@ struct profileView: View {
                             .clipShape(Circle())
                     }
                 }
-              
-
 
                 if isEditing {
                     TextField("Username", text: $userName)
@@ -95,12 +98,12 @@ struct profileView: View {
                         .padding(.bottom, 50)
                 }
 
-                
                 VStack(spacing: 25) {
                     ProfileField(icon: "envelope", text: $email, isSecure: false, isEditing: isEditing)
                     ProfileField(icon: "lock", text: $password, isSecure: true, isEditing: isEditing)
                 }
                 .padding(.horizontal, 20)
+
                 NavigationLink(destination: SignUpView(), isActive: $navigateToLogin) {
                     EmptyView()
                 }
@@ -119,7 +122,6 @@ struct profileView: View {
 
                 Spacer()
             }
-            .navigationBarTitle("Profile Page", displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -130,7 +132,6 @@ struct profileView: View {
                             .font(.custom("SF Pro", size: 18))
                     }
                 }
-
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -152,12 +153,16 @@ struct profileView: View {
         }
     }
 
-    // ✅ تحميل بيانات المستخدم المحفوظة أو إنشاء واحد جديد لو ما فيه
     func loadUserData() {
         if let currentUser = users.first {
             userName = currentUser.firstName + " " + currentUser.lastName
             email = currentUser.email
             password = currentUser.password
+            loggedInName = userName
+
+            if let image = UIImage.fromBase64(profileImageData) {
+                profileImage = image
+            }
         } else {
             let newUser = UserData(firstName: "", lastName: "", email: "", password: "")
             context.insert(newUser)
@@ -170,7 +175,6 @@ struct profileView: View {
         }
     }
 
-    // ✅ حفظ التعديلات
     func saveChanges() {
         guard let currentUser = users.first else { return }
 
@@ -179,6 +183,11 @@ struct profileView: View {
         currentUser.lastName = nameParts.dropFirst().first.map(String.init) ?? ""
         currentUser.email = email
         currentUser.password = password
+        loggedInName = userName
+
+        if let image = profileImage?.toBase64() {
+            profileImageData = image
+        }
 
         do {
             try context.save()
@@ -192,13 +201,13 @@ struct profileView: View {
         email = ""
         password = ""
         userName = "Username"
+        profileImageData = ""
+        loggedInName = ""
         isEditing = false
         navigateToLogin = true
     }
-
 }
 
-// الحقول
 struct ProfileField: View {
     var icon: String
     @Binding var text: String
@@ -244,7 +253,6 @@ struct ProfileField: View {
     }
 }
 
-// الألوان
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -260,6 +268,23 @@ extension Color {
         self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255, opacity: Double(a) / 255)
     }
 }
+
+extension UIImage {
+    func toBase64() -> String? {
+        return self.jpegData(compressionQuality: 0.8)?.base64EncodedString()
+    }
+
+    static func fromBase64(_ base64: String) -> UIImage? {
+        guard let data = Data(base64Encoded: base64),
+              let image = UIImage(data: data) else {
+            return nil
+        }
+        return image
+    }
+}
+
+
+
 
 struct profileView_Previews: PreviewProvider {
     static var previews: some View {

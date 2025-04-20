@@ -4,7 +4,8 @@ import SwiftData
 struct SignUpView: View {
     @Environment(\.modelContext) private var context
     @AppStorage("loggedInEmail") var loggedInEmail: String = ""
-    
+    @AppStorage("loggedInName") var loggedInName: String = ""
+
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var email = ""

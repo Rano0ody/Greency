@@ -10,13 +10,18 @@ import SwiftData
 
 struct HomePageView: View {
     @AppStorage("loggedInEmail") var loggedInEmail: String = ""
+    @AppStorage("loggedInName") var loggedInName: String = ""
+    @AppStorage("profileImageData") var profileImageData: String = ""
+    
+    @State private var selectedTab: String? = "Home"
+    @State private var navigateToProfile = false
+    
     @Query private var users: [UserData]
     
     var currentUser: UserData? {
         users.first { $0.email == loggedInEmail }
     }
-    @State private var selectedTab: String? = "Home"
-    @State private var navigateToProfile = false
+ 
 
     var body: some View {
         let userName = currentUser?.firstName ?? "Guest"
@@ -62,36 +67,47 @@ struct HomePageView: View {
     }
     
     private func header(userName: String, lastName: String) -> some View {
-        HStack {
+        let fallbackName = userName + " " + lastName
+        let displayName = loggedInName.isEmpty ? fallbackName : loggedInName
+
+        return HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Welcome")
                     .font(.largeTitle)
                     .bold()
-                
+
                 HStack {
                     Text("Good Evening")
-                    Text("\(userName) \(lastName)") // Display both first and last name
+                    Text(displayName)
                         .foregroundColor(Color("MainPurple"))
                 }
                 .font(.title3)
             }
-            
-            Spacer()
-            
-            Image("profileImage")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 70, height: 70)
-                .clipShape(Circle())
-                .onTapGesture {
-                    navigateToProfile = true
-                }
 
-                
+            Spacer()
+
+            Button(action: {
+                navigateToProfile = true
+            }) {
+                if let image = UIImage.fromBase64(profileImageData), !profileImageData.isEmpty {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 70, height: 70)
+                        .clipShape(Circle())
+                } else {
+                    Image("profileImage")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 70, height: 70)
+                        .clipShape(Circle())
+                }
+            }
         }
         .padding()
         .background(Color.white)
     }
+
 }
 
 struct CategoryCard: View {

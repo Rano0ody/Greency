@@ -4,6 +4,7 @@ import SwiftData
 struct LogInView: View {
     @Environment(\.modelContext) private var context
     @AppStorage("loggedInEmail") var loggedInEmail: String = ""
+    @AppStorage("loggedInName") var loggedInName: String = ""
 
     @State private var email = ""
     @State private var password = ""
