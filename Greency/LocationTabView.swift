@@ -50,7 +50,7 @@ struct LocationTabView: View {
             
             VStack {
                 Spacer()
-                CustomTabBar(selectedTab: $selectedTab)
+               
                     .background(Color.white.ignoresSafeArea(edges: .bottom))
                     .shadow(color: .black.opacity(0.1), radius: 6, x: 0, y: -2)
             }

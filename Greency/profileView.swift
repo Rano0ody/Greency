@@ -5,28 +5,30 @@
 //  Created by joody on 12/10/1446 AH.
 //
 import SwiftUI
+import SwiftData
 
 struct profileView: View {
-    @Environment(\.dismiss) private var dismiss  // لاستدعاء dismiss للصفحة
-    @State private var email: String = "llanmi@mail.com"
-    @State private var password: String = "XXXXXXXXXXXXXX"
-    @State private var name: String = "Tahani Muhsen"
-    @State private var userName: String = "Username" // Default text for username
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    @Query private var users: [UserData]
+
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var name: String = ""
+    @State private var userName: String = "Username"
     @State private var isEditing: Bool = false
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
                 Spacer()
-                
-                // صورة البروفايل
+
                 Image(systemName: "person.circle.fill")
                     .resizable()
                     .frame(width: 100, height: 100)
                     .foregroundColor(Color(hex: "2FC2D6"))
                     .padding(.bottom, 10)
-                
-                // اسم المستخدم – يظهر كنص عند عدم التعديل وعند التعديل يصبح TextField
+
                 if isEditing {
                     TextField("Username", text: $userName)
                         .font(.custom("SF Pro", size: 22))
@@ -43,15 +45,13 @@ struct profileView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.gray)
                 }
-                
-                // حقول الإيميل والباسوورد مع مسافة بينهم
+
                 VStack(spacing: 25) {
                     ProfileField(icon: "envelope.fill", text: $email, isSecure: false, isEditing: isEditing)
                     ProfileField(icon: "lock.fill", text: $password, isSecure: true, isEditing: isEditing)
                 }
                 .padding(.horizontal, 20)
-                
-                // زر تسجيل الخروج
+
                 Button(action: logout) {
                     HStack {
                         Text("Logout")
@@ -63,12 +63,11 @@ struct profileView: View {
                     }
                 }
                 .padding(.top, 30)
-                
+
                 Spacer()
             }
             .navigationBarTitle("Profile Page", displayMode: .inline)
             .toolbar {
-                // زر الـ Back المُعدل: عند الضغط يُغلق الصفحة (يستخدم dismiss)
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         dismiss()
@@ -78,12 +77,11 @@ struct profileView: View {
                             .font(.custom("SF Pro", size: 18))
                     }
                 }
-                // زر "Edit" أو "Save"
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         isEditing.toggle()
                         if !isEditing {
-                            // حفظ التغييرات هنا
                             saveChanges()
                         }
                     }) {
@@ -93,38 +91,69 @@ struct profileView: View {
                     }
                 }
             }
+            .onAppear {
+                loadUserData()
+            }
         }
     }
-    
-    // حفظ التغييرات (يمكنك تعديل منطق الحفظ كما تفضلي)
-    func saveChanges() {
-        // إضافة كود التحديث وحفظ البيانات هنا
-        print("Saving changes for user: \(userName)")
+
+    // ✅ تحميل بيانات المستخدم المحفوظة أو إنشاء واحد جديد لو ما فيه
+    func loadUserData() {
+        if let currentUser = users.first {
+            userName = currentUser.firstName + " " + currentUser.lastName
+            email = currentUser.email
+            password = currentUser.password
+        } else {
+            let newUser = UserData(firstName: "", lastName: "", email: "", password: "")
+            context.insert(newUser)
+            do {
+                try context.save()
+                print("✅ تم إنشاء مستخدم جديد")
+            } catch {
+                print("❌ فشل في إنشاء المستخدم: \(error)")
+            }
+        }
     }
-    
-    // تسجيل الخروج (يمكنك تعديل منطق تسجيل الخروج لاحقاً)
+
+    // ✅ حفظ التعديلات
+    func saveChanges() {
+        guard let currentUser = users.first else { return }
+
+        let nameParts = userName.split(separator: " ", maxSplits: 1)
+        currentUser.firstName = nameParts.first.map(String.init) ?? ""
+        currentUser.lastName = nameParts.dropFirst().first.map(String.init) ?? ""
+        currentUser.email = email
+        currentUser.password = password
+
+        do {
+            try context.save()
+            print("✅ تم حفظ التغييرات بنجاح")
+        } catch {
+            print("❌ فشل في حفظ التغييرات: \(error)")
+        }
+    }
+
     func logout() {
-        // إعادة تعيين الحقول أو إضافة منطق تسجيل الخروج
-        email = "llanmi@mail.com"
-        password = "XXXXXXXXXXXXXX"
+        email = ""
+        password = ""
         userName = "Username"
         isEditing = false
     }
 }
 
-// مكون لإدخال البيانات مع أيقونة
+// الحقول
 struct ProfileField: View {
     var icon: String
     @Binding var text: String
     var isSecure: Bool
     var isEditing: Bool
-    
+
     var body: some View {
         HStack {
             Image(systemName: icon)
                 .foregroundColor(Color(hex: "70CB00"))
                 .frame(width: 30, height: 30)
-            
+
             if isSecure {
                 if isEditing {
                     TextField("Password", text: $text)
@@ -157,6 +186,7 @@ struct ProfileField: View {
     }
 }
 
+// الألوان
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -164,22 +194,12 @@ extension Color {
         Scanner(string: hex).scanHexInt64(&int)
         let a, r, g, b: UInt64
         switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 0, 0, 0)
+        case 3: (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default: (a, r, g, b) = (255, 0, 0, 0)
         }
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue: Double(b) / 255,
-            opacity: Double(a) / 255
-        )
+        self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255, opacity: Double(a) / 255)
     }
 }
 

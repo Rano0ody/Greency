@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GoogleMaps
+import SwiftData
 
 @main
 struct GreencyApp: App {
@@ -17,7 +18,7 @@ struct GreencyApp: App {
     var body: some Scene {
         WindowGroup {
             SplashScreenView()
+                .modelContainer(for: UserData.self) // ✅ عشان SwiftData تحفظ البيانات وتبقى محفوظة
         }
-        .modelContainer(for: UserData.self)
     }
 }

@@ -54,8 +54,7 @@ struct ContentView: View {
 
                VStack {
                    Spacer()
-                   CustomTabBar(selectedTab: $selectedTab)
-                       .padding(.bottom, 0)
+                  
                        .background(Color.white)
                        .edgesIgnoringSafeArea(.bottom)
 
